@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0e1f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧠</text></svg>">
+<title>Linked Lists | JTG OA Lab</title><link rel="stylesheet" href="style.css"></head><body>
+<header><nav class="nav"><a class="logo" href="index.html">JTG <span>OA LAB</span></a><a class="" href="index.html">🏠 Command Center</a><a class="" href="dsa.html">🧠 DSA Core</a><a class="" href="patterns.html">⚡ Patterns</a><a class="active" href="linked-list.html">🔗 Linked Lists</a><a class="" href="trees.html">🌳 Trees & BST</a><a class="" href="output-traps.html">💻 Output Traps</a><a class="" href="quick.html">🚀 Quick Revision</a></nav></header>
+<div class="progress"><div id="progressBar"></div></div><main class="wrap">
+<div class="hero"><span class="float" style="right:6%;top:12%;animation-delay:0.0s">🔗</span><span class="float" style="right:19%;top:34%;animation-delay:0.8s">🐢</span><span class="float" style="right:32%;top:56%;animation-delay:1.6s">🐇</span><span class="badge">HIGH PRIORITY</span><h1>Linked Lists — Master These Templates</h1>
+<p>Do not merely memorize the code. Understand what each pointer means. Most linked-list bugs come from losing the next node before changing a pointer.</p></div>
+
+<section><h2>Node Syntax</h2><div class="card" data-tabs>
+<div class="tabs"><button class="tab active">C++</button><button class="tab">Java</button></div>
+<div class="tabcontent active"><pre><code>struct Node {
+    int data;
+    Node* next;
+    Node(int x){ data=x; next=NULL; }
+};</code></pre></div>
+<div class="tabcontent"><pre><code>class Node {
+    int data;
+    Node next;
+    Node(int x){ data=x; next=null; }
+}</code></pre></div></div></section>
+
+<section><h2>Traversal</h2><div class="card"><pre><code>Node* temp=head;
+while(temp!=NULL){
+    cout &lt;&lt; temp-&gt;data &lt;&lt; " ";
+    temp=temp-&gt;next;
+}</code></pre><p>The Java idea is identical: <code>Node temp=head; while(temp!=null){...; temp=temp.next;}</code></p></div></section>
+
+<section><h2>Reverse — MEMORIZE THE FOUR MOVES</h2><div class="card"><div class="callout good"><b>save next → reverse pointer → move prev → move curr</b></div>
+<pre><code>Node* prev=NULL;
+Node* curr=head;
+while(curr!=NULL){
+    Node* next=curr-&gt;next;
+    curr-&gt;next=prev;
+    prev=curr;
+    curr=next;
+}
+head=prev;</code></pre>
+<p>Time O(n), extra space O(1).</p></div></section>
+
+<section><h2>Middle — Slow + Fast</h2><div class="card"><pre><code>Node* slow=head;
+Node* fast=head;
+while(fast!=NULL && fast-&gt;next!=NULL){
+    slow=slow-&gt;next;
+    fast=fast-&gt;next-&gt;next;
+}
+// slow is at the middle (exact convention depends on even length)</code></pre></div></section>
+
+<section><h2>Cycle — Floyd’s Algorithm</h2><div class="card"><pre><code>bool hasCycle(Node* head){
+    Node* slow=head;
+    Node* fast=head;
+    while(fast!=NULL && fast-&gt;next!=NULL){
+        slow=slow-&gt;next;
+        fast=fast-&gt;next-&gt;next;
+        if(slow==fast) return true;
+    }
+    return false;
+}</code></pre><p><b>Why?</b> Fast gains one node per iteration on slow inside a cycle, so they eventually meet.</p></div></section>
+
+<section><h2>Kth Node From End</h2><div class="card"><pre><code>Node* slow=head;
+Node* fast=head;
+for(int i=0;i&lt;k;i++) fast=fast-&gt;next;
+while(fast!=NULL){
+    slow=slow-&gt;next;
+    fast=fast-&gt;next;
+}
+return slow;</code></pre><p>Keep a gap of k nodes. When fast reaches the end, slow is k positions from the end.</p></div></section>
+
+<section><h2>Rotation — The Mental Trick</h2><div class="card"><p>For a right rotation, find length, connect tail to head to form a circle, then break the circle at the new tail. The important insight is:</p><div class="callout"><b>rotation = make circular + break at the correct point</b></div></div></section>
+
+<section><div class="card quiz"><h3>Which technique detects a linked-list cycle in O(1) extra space?</h3>
+<button class="option" data-correct="true">Floyd slow/fast pointers</button>
+<button class="option" data-correct="false">Hash map of all values</button>
+<button class="option" data-correct="false">Sorting the list</button>
+<button class="option" data-correct="false">Binary search</button></div></section>
+</main>
+<footer>Built for your JTG OA sprint • C++ + Java • Learn patterns, not just formulas.</footer>
+<script src="app.js"></script></body></html>

@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0e1f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧠</text></svg>">
+<title>DSA Core | JTG OA Lab</title><link rel="stylesheet" href="style.css"></head><body>
+<header><nav class="nav"><a class="logo" href="index.html">JTG <span>OA LAB</span></a><a class="" href="index.html">🏠 Command Center</a><a class="active" href="dsa.html">🧠 DSA Core</a><a class="" href="patterns.html">⚡ Patterns</a><a class="" href="linked-list.html">🔗 Linked Lists</a><a class="" href="trees.html">🌳 Trees & BST</a><a class="" href="output-traps.html">💻 Output Traps</a><a class="" href="quick.html">🚀 Quick Revision</a></nav></header>
+<div class="progress"><div id="progressBar"></div></div><main class="wrap">
+<div class="hero"><span class="float" style="right:6%;top:12%;animation-delay:0.0s">🧠</span><span class="float" style="right:19%;top:34%;animation-delay:0.8s">📊</span><span class="float" style="right:32%;top:56%;animation-delay:1.6s">⚙️</span><span class="badge">DSA • ZERO-FLUFF LEARNING MODE</span>
+<h1>Data Structures & Algorithms</h1>
+<p>The goal is not to memorize 100 algorithms. The goal is to recognize the structure of a problem and choose the data structure or pattern that reduces the work.</p></div>
+
+<section><div class="section-title"><h2>1. Big-O</h2></div>
+<div class="card"><p>Big-O describes how work grows as input <b>n</b> grows.</p>
+<table><tr><th>Complexity</th><th>Meaning</th><th>Typical example</th></tr>
+<tr><td>O(1)</td><td>constant</td><td>array index access</td></tr><tr><td>O(log n)</td><td>halving the search space</td><td>binary search</td></tr>
+<tr><td>O(n)</td><td>one pass</td><td>linear search</td></tr><tr><td>O(n log n)</td><td>divide + linear combine</td><td>merge sort</td></tr>
+<tr><td>O(n²)</td><td>all pairs / nested n loops</td><td>naive pair checking</td></tr><tr><td>O(2ⁿ)</td><td>exponential</td><td>naive subset recursion</td></tr></table>
+<div class="callout warn"><b>OA trick:</b> <code>for(i=1;i&lt;n;i*=2)</code> is O(log n), not O(n). A loop of exactly 100 iterations inside an n-loop is still O(n).</div>
+</div></section>
+
+<section><h2>2. Arrays</h2><div class="grid">
+<div class="card"><h3>Access</h3><pre><code>int a[] = {10,20,30,40};
+cout &lt;&lt; a[2]; // 30</code></pre><p>Index access is O(1).</p></div>
+<div class="card"><h3>Traversal</h3><pre><code>for(int i=0;i&lt;n;i++)
+    cout &lt;&lt; a[i] &lt;&lt; " ";</code></pre><p>Traversal is O(n).</p></div></div></section>
+
+<section><h2>3. Two Pointers</h2><div class="card"><p>Use this heavily when an array is sorted and the question asks about a pair or a target sum.</p>
+<pre><code>int l=0, r=n-1;
+while(l&lt;r){
+    int sum=a[l]+a[r];
+    if(sum==target) return true;
+    if(sum&lt;target) l++;
+    else r--;
+}
+return false;</code></pre>
+<p><b>Recognition:</b> sorted + pair + target → two pointers. O(n).</p></div></section>
+
+<section><h2>4. Sliding Window</h2><div class="card"><p>For a fixed-size contiguous block, don't recompute the entire sum.</p>
+<pre><code>int sum=0;
+for(int i=0;i&lt;k;i++) sum+=a[i];
+int ans=sum;
+for(int i=k;i&lt;n;i++){
+    sum += a[i];
+    sum -= a[i-k];
+    ans=max(ans,sum);
+}</code></pre>
+<p><b>Recognition:</b> consecutive/contiguous + fixed k → sliding window.</p></div></section>
+
+<section><h2>5. Hashing</h2><div class="grid">
+<div class="card"><h3>C++ frequency</h3><pre><code>unordered_map&lt;int,int&gt; freq;
+for(int x:a) freq[x]++;</code></pre></div>
+<div class="card"><h3>Java frequency</h3><pre><code>HashMap&lt;Integer,Integer&gt; freq = new HashMap&lt;&gt;();
+for(int x:a)
+    freq.put(x,freq.getOrDefault(x,0)+1);</code></pre></div>
+</div><div class="callout"><b>Recognition:</b> frequency, duplicate, “seen before”, pair sum in an unsorted array → hash map/set.</div></section>
+
+<section><h2>6. Prefix Sum</h2><div class="card"><p>For repeated range-sum queries, build prefix sums once.</p>
+<pre><code>prefix[i] = prefix[i-1] + a[i]</code></pre>
+<p>For l &gt; 0:</p><pre><code>sum(l,r) = prefix[r] - prefix[l-1]</code></pre>
+<p>For l = 0, answer is <code>prefix[r]</code>.</p></div></section>
+
+<section><h2>7. Binary Search</h2><div class="card"><p>Use it when the search space is sorted or has a monotonic yes/no property.</p>
+<pre><code>int l=0,r=n-1;
+while(l&lt;=r){
+    int mid=l+(r-l)/2;
+    if(a[mid]==target) return mid;
+    if(a[mid]&lt;target) l=mid+1;
+    else r=mid-1;
+}
+return -1;</code></pre>
+<div class="callout warn"><b>Why l+(r-l)/2?</b> It avoids overflow that can occur with (l+r)/2.</div></div></section>
+
+<section><h2>8. Recursion</h2><div class="card"><p>Every recursive solution needs a <b>base case</b> and progress toward it.</p>
+<pre><code>int fact(int n){
+    if(n==0) return 1;
+    return n*fact(n-1);
+}</code></pre>
+<p>For output questions, write the call stack. If printing happens before recursion, you see the descent; if after recursion, you see the unwind.</p></div></section>
+
+<section><h2>9. Stack + Queue</h2><div class="grid">
+<div class="card"><h3>Stack = LIFO</h3><p>Plates. Last in, first out.</p><pre><code>stack&lt;int&gt; st;
+st.push(10);
+st.push(20);
+st.top(); // 20
+st.pop();</code></pre><p>Brackets and next-greater problems often scream “stack”.</p></div>
+<div class="card"><h3>Queue = FIFO</h3><p>Ticket line. First in, first out.</p><pre><code>queue&lt;int&gt; q;
+q.push(10);
+q.push(20);
+q.front(); // 10
+q.pop();</code></pre><p>Level-order tree traversal uses a queue.</p></div>
+</div></section>
+
+<section><h2>10. Sorting</h2><div class="table-wrap"><table><tr><th>Algorithm</th><th>Typical time</th><th>Key trap</th></tr>
+<tr><td>Bubble</td><td>O(n²)</td><td>simple but slow</td></tr><tr><td>Selection</td><td>O(n²)</td><td>few swaps</td></tr>
+<tr><td>Insertion</td><td>O(n²)</td><td>good for nearly sorted data</td></tr><tr><td>Merge</td><td>O(n log n)</td><td>extra memory</td></tr>
+<tr><td>Quick</td><td>O(n log n) average</td><td>worst case O(n²)</td></tr><tr><td>Heap</td><td>O(n log n)</td><td>in-place family</td></tr></table></div></section>
+
+<section><h2>11. Graph Basics</h2><div class="card"><p>Graph = vertices + edges. For an undirected adjacency list:</p>
+<pre><code>vector&lt;vector&lt;int&gt;&gt; g(n);
+g[u].push_back(v);
+g[v].push_back(u);</code></pre>
+<p>DFS uses recursion/stack. BFS uses a queue. Traversing an adjacency list is typically O(V+E).</p></div></section>
+
+<section><h2>12. DSA Recognition Table</h2><div class="table-wrap"><table>
+<tr><th>If the question says...</th><th>Think...</th></tr>
+<tr><td>pair sum in sorted array</td><td>two pointers</td></tr>
+<tr><td>pair sum in unsorted array</td><td>hash map</td></tr>
+<tr><td>k consecutive elements</td><td>sliding window</td></tr>
+<tr><td>many range sums</td><td>prefix sum</td></tr>
+<tr><td>sorted search</td><td>binary search</td></tr>
+<tr><td>duplicates/frequency</td><td>hash set/map</td></tr>
+<tr><td>middle of linked list</td><td>slow + fast</td></tr>
+<tr><td>cycle in linked list</td><td>slow + fast</td></tr>
+<tr><td>kth from end</td><td>two pointers with a gap</td></tr>
+<tr><td>reverse linked list</td><td>prev/current/next</td></tr>
+<tr><td>tree traversal</td><td>DFS</td></tr>
+<tr><td>level order</td><td>BFS + queue</td></tr>
+<tr><td>BST sorted sequence</td><td>inorder</td></tr>
+<tr><td>next greater/smaller</td><td>monotonic stack</td></tr>
+<tr><td>shortest unweighted path</td><td>BFS</td></tr>
+</table></div></section>
+
+<section><h2>13. Quick Interactive Check</h2>
+<div class="card quiz"><h3>Sorted array + pair sum + target. Best first technique?</h3>
+<button class="option" data-correct="false">Nested loops</button>
+<button class="option" data-correct="true">Two pointers</button>
+<button class="option" data-correct="false">DFS</button>
+<button class="option" data-correct="false">Recursion</button></div>
+</section>
+</main>
+<footer>Built for your JTG OA sprint • C++ + Java • Learn patterns, not just formulas.</footer>
+<script src="app.js"></script></body></html>

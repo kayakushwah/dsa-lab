@@ -1,0 +1,71 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0e1f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧠</text></svg>">
+<title>Trees & BST | JTG OA Lab</title><link rel="stylesheet" href="style.css"></head><body>
+<header><nav class="nav"><a class="logo" href="index.html">JTG <span>OA LAB</span></a><a class="" href="index.html">🏠 Command Center</a><a class="" href="dsa.html">🧠 DSA Core</a><a class="" href="patterns.html">⚡ Patterns</a><a class="" href="linked-list.html">🔗 Linked Lists</a><a class="active" href="trees.html">🌳 Trees & BST</a><a class="" href="output-traps.html">💻 Output Traps</a><a class="" href="quick.html">🚀 Quick Revision</a></nav></header>
+<div class="progress"><div id="progressBar"></div></div><main class="wrap">
+<div class="hero"><span class="float" style="right:6%;top:12%;animation-delay:0.0s">🌳</span><span class="float" style="right:19%;top:34%;animation-delay:0.8s">🍃</span><span class="float" style="right:32%;top:56%;animation-delay:1.6s">🌲</span><span class="badge">TREES + BST</span><h1>Tree Traversal Without Panic</h1>
+<p>The fastest way to become comfortable with trees is to understand one recursive skeleton and move the “process node” line.</p></div>
+
+<section><h2>Tree Node</h2><div class="card"><pre><code>struct Node{
+    int data;
+    Node* left;
+    Node* right;
+};</code></pre><p>Java: <code>class Node { int data; Node left,right; }</code></p></div></section>
+
+<section><h2>The Three Traversals</h2><div class="table-wrap"><table><tr><th>Name</th><th>Order</th><th>Memory trick</th></tr>
+<tr><td>Preorder</td><td>ROOT → LEFT → RIGHT</td><td>Root comes PRE</td></tr>
+<tr><td>Inorder</td><td>LEFT → ROOT → RIGHT</td><td>Root is IN the middle</td></tr>
+<tr><td>Postorder</td><td>LEFT → RIGHT → ROOT</td><td>Root comes POST/last</td></tr></table></div>
+<div class="card"><p>For:</p><pre><code>        1
+       / \
+      2   3
+     / \
+    4   5</code></pre><p>Preorder = <b>1 2 4 5 3</b><br>Inorder = <b>4 2 5 1 3</b><br>Postorder = <b>4 5 2 3 1</b></p></div></section>
+
+<section><h2>One Recursive Skeleton</h2><div class="card"><pre><code>void dfs(Node* root){
+    if(root==NULL) return;
+
+    // process root
+
+    dfs(root-&gt;left);
+    dfs(root-&gt;right);
+}</code></pre>
+<p>Move processing:</p><ul><li>before both calls → preorder</li><li>between calls → inorder</li><li>after both calls → postorder</li></ul></div></section>
+
+<section><h2>Height</h2><div class="card"><pre><code>int height(Node* root){
+    if(root==NULL) return 0;
+    return 1 + max(height(root-&gt;left), height(root-&gt;right));
+}</code></pre><p>This definition counts nodes. Some problems define height in edges, so always inspect the convention.</p></div></section>
+
+<section><h2>Count + Sum</h2><div class="grid"><div class="card"><h3>Count</h3><pre><code>int count(Node* root){
+    if(root==NULL) return 0;
+    return 1 + count(root-&gt;left) + count(root-&gt;right);
+}</code></pre></div><div class="card"><h3>Sum</h3><pre><code>int sum(Node* root){
+    if(root==NULL) return 0;
+    return root-&gt;data + sum(root-&gt;left) + sum(root-&gt;right);
+}</code></pre></div></div></section>
+
+<section><h2>Level Order = BFS + Queue</h2><div class="card"><pre><code>queue&lt;Node*&gt; q;
+q.push(root);
+while(!q.empty()){
+    Node* cur=q.front(); q.pop();
+    cout &lt;&lt; cur-&gt;data &lt;&lt; " ";
+    if(cur-&gt;left) q.push(cur-&gt;left);
+    if(cur-&gt;right) q.push(cur-&gt;right);
+}</code></pre></div></section>
+
+<section><h2>BST</h2><div class="card"><p>Binary Search Tree rule:</p><div class="callout good"><b>left subtree values &lt; root &lt; right subtree values</b></div>
+<p>Therefore inorder traversal of a valid BST produces values in sorted order.</p>
+<pre><code>bool search(Node* root,int x){
+    if(root==NULL) return false;
+    if(root-&gt;data==x) return true;
+    if(x&lt;root-&gt;data) return search(root-&gt;left,x);
+    return search(root-&gt;right,x);
+}</code></pre>
+<p>Balanced BST search ≈ O(log n); a skewed BST can degrade to O(n).</p></div></section>
+
+<section><div class="card quiz"><h3>Which traversal of a BST gives sorted order?</h3>
+<button class="option" data-correct="false">Preorder</button><button class="option" data-correct="true">Inorder</button>
+<button class="option" data-correct="false">Postorder</button><button class="option" data-correct="false">Level order</button></div></section>
+</main>
+<footer>Built for your JTG OA sprint • C++ + Java • Learn patterns, not just formulas.</footer>
+<script src="app.js"></script></body></html>

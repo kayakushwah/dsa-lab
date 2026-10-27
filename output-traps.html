@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0e1f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🧠</text></svg>">
+<title>Output Traps | JTG OA Lab</title><link rel="stylesheet" href="style.css"></head><body>
+<header><nav class="nav"><a class="logo" href="index.html">JTG <span>OA LAB</span></a><a class="" href="index.html">🏠 Command Center</a><a class="" href="dsa.html">🧠 DSA Core</a><a class="" href="patterns.html">⚡ Patterns</a><a class="" href="linked-list.html">🔗 Linked Lists</a><a class="" href="trees.html">🌳 Trees & BST</a><a class="active" href="output-traps.html">💻 Output Traps</a><a class="" href="quick.html">🚀 Quick Revision</a></nav></header>
+<div class="progress"><div id="progressBar"></div></div><main class="wrap">
+<div class="hero"><span class="float" style="right:6%;top:12%;animation-delay:0.0s">💻</span><span class="float" style="right:19%;top:34%;animation-delay:0.8s">🪤</span><span class="float" style="right:32%;top:56%;animation-delay:1.6s">🔮</span><span class="badge">OA OUTPUT PREDICTION</span><h1>Code Given → Predict the Output</h1>
+<p>Do not guess. Track state line-by-line. These traps are small enough to memorize and powerful enough to save marks.</p></div>
+
+<section><h2>1. ++x vs x++</h2><div class="grid"><div class="card"><h3>Post-increment</h3><pre><code>int x=5;
+int y=x++;
+// y=5, x=6</code></pre><p>Use first, then change.</p></div><div class="card"><h3>Pre-increment</h3><pre><code>int x=5;
+int y=++x;
+// x=6, y=6</code></pre><p>Change first, then use.</p></div></div></section>
+
+<section><h2>2. Pointers</h2><div class="card"><pre><code>int x=10;
+int *p=&amp;x;
+*p=50;
+cout &lt;&lt; x; // 50</code></pre><p><code>p</code> stores an address; <code>*p</code> accesses the value at that address.</p></div></section>
+
+<section><h2>3. Pointer-to-pointer</h2><div class="card"><pre><code>int x=10;
+int *p=&amp;x;
+int **q=&amp;p;</code></pre><p>Relationship: <b>q → p → x</b>. Therefore <code>x</code>, <code>*p</code> and <code>**q</code> all evaluate to 10.</p></div></section>
+
+<section><h2>4. Array Pointer Equivalence</h2><div class="card"><pre><code>int a[]={10,20,30};
+cout &lt;&lt; *(a+1); // 20
+cout &lt;&lt; 1[a];   // 20</code></pre><p>Because <code>a[i]</code> is equivalent to <code>*(a+i)</code> in C/C++.</p></div></section>
+
+<section><h2>5. Recursion Output</h2><div class="grid"><div class="card"><h3>Print before recursion</h3><pre><code>void f(int n){
+    if(n==0) return;
+    cout&lt;&lt;n&lt;&lt;" ";
+    f(n-1);
+}</code></pre><p><code>f(3)</code> → <b>3 2 1</b></p></div><div class="card"><h3>Print after recursion</h3><pre><code>void f(int n){
+    if(n==0) return;
+    f(n-1);
+    cout&lt;&lt;n&lt;&lt;" ";
+}</code></pre><p><code>f(3)</code> → <b>1 2 3</b></p></div></div>
+<div class="callout warn">If there is printing both before and after the recursive call, write the descent and then the unwind. Example: 3 2 1 1 2 3.</div></section>
+
+<section><h2>6. static local variable</h2><div class="card"><pre><code>void f(){
+    static int x=0;
+    x++;
+    cout&lt;&lt;x&lt;&lt;" ";
+}
+f(); f(); f();</code></pre><p>Output: <b>1 2 3</b>. A static local retains its value between calls.</p></div></section>
+
+<section><h2>7. break vs continue</h2><div class="grid"><div class="card"><pre><code>for(int i=1;i&lt;=5;i++){
+    if(i==3) continue;
+    cout&lt;&lt;i&lt;&lt;" ";
+}</code></pre><p>1 2 4 5</p></div><div class="card"><pre><code>for(int i=1;i&lt;=5;i++){
+    if(i==3) break;
+    cout&lt;&lt;i&lt;&lt;" ";
+}</code></pre><p>1 2</p></div></div></section>
+
+<section><h2>8. sizeof vs strlen</h2><div class="card"><pre><code>char a[]="hello";
+cout&lt;&lt;strlen(a); // 5
+cout&lt;&lt;sizeof(a); // 6</code></pre><p>The array includes the terminating <code>\0</code>.</p></div></section>
+
+<section><h2>9. Java == vs equals()</h2><div class="card"><pre><code>String a=new String("hello");
+String b=new String("hello");
+System.out.println(a==b);
+System.out.println(a.equals(b));</code></pre><p>Output: <b>false true</b>. For objects, <code>==</code> checks reference identity; <code>equals()</code> can check content when implemented accordingly.</p></div></section>
+
+<section><h2>10. Java String immutability</h2><div class="card"><pre><code>String s="hello";
+s.concat(" world");
+System.out.println(s);</code></pre><p>Output: <b>hello</b>. The concatenation returns a new String; it does not mutate the original.</p></div></section>
+
+<section><h2>11. C++ virtual dispatch</h2><div class="card"><pre><code>class A{
+public:
+    virtual void show(){cout&lt;&lt;"A";}
+};
+class B: public A{
+public:
+    void show(){cout&lt;&lt;"B";}
+};
+A* p=new B();
+p-&gt;show();</code></pre><p>Output: <b>B</b>. With a virtual function, the overridden function is selected dynamically through the base pointer.</p></div></section>
+
+<section><h2>12. Constructor order</h2><div class="card"><p>In inheritance, the parent/base constructor runs before the child/derived constructor. Destruction is generally in reverse order.</p></div></section>
+
+<section><h2>13. Integer division</h2><div class="grid"><div class="card"><pre><code>cout&lt;&lt;5/2;</code></pre><p><b>2</b></p></div><div class="card"><pre><code>cout&lt;&lt;5.0/2;</code></pre><p><b>2.5</b></p></div></div></section>
+
+<section><h2>14. Switch fall-through</h2><div class="card"><pre><code>int x=2;
+switch(x){
+case 1: cout&lt;&lt;"A";
+case 2: cout&lt;&lt;"B";
+case 3: cout&lt;&lt;"C";
+}</code></pre><p>Output: <b>BC</b>. Without <code>break</code>, execution continues into later cases.</p></div></section>
+
+<section><h2>15. Bitwise mini-tricks</h2><div class="card"><p><code>x ^ x = 0</code>, <code>x ^ 0 = x</code>.</p><p>That is why XOR can find a unique element when every other element occurs twice.</p><pre><code>2 ^ 3 ^ 2  // 3</code></pre></div></section>
+
+<section><div class="card quiz"><h3>What does 5/2 produce when both operands are int?</h3>
+<button class="option" data-correct="true">2</button><button class="option" data-correct="false">2.5</button><button class="option" data-correct="false">2.0</button></div></section>
+</main>
+<footer>Built for your JTG OA sprint • C++ + Java • Learn patterns, not just formulas.</footer>
+<script src="app.js"></script></body></html>
